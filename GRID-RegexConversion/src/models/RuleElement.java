@@ -1,3 +1,4 @@
+package models;
 public class RuleElement {
 	String startTag;
 	String value;

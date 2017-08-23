@@ -1,3 +1,4 @@
+package main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -5,6 +6,9 @@ import java.nio.file.ProviderNotFoundException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
+
+import models.RegexUtils;
+import models.Rule;
 
 public class RuleToRegex {
 
