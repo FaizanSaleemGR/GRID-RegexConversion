@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 
 public class RegexUtils {
 	
+	/*
+	 * Tags we support in a rule.
+	 */
 	ArrayList<String> tags = new ArrayList<String>() {{ 
 		add("token");
 		add("prefix");
@@ -19,111 +22,50 @@ public class RegexUtils {
 		add("postfix included=\"yes\"");
 	}};
 	
-	public RuleElement convertStringToRuleElement(String str) {
-		RuleElement ruleElement = null;
-		String tag="";
-		Boolean tagFound = false;
-		Iterator<String> tagIterator = tags.stream().iterator();
-		
-		
-		do {
-//			tag = tags.stream().findAny().get();
-			tag = tagIterator.next();
-			String startTag = "<"+tag+">";
-			String endTag = "</"+tag+">";
-		
-			if(str.contains(tag)) {
-				tagFound = true;
-				str = str.replace(startTag, "").replace(endTag, "");
-				ruleElement = new RuleElement(tag, str);
-			}
-		}while(!tagFound);
-		
-		return ruleElement;
-	}
 	
-	public String replaceBrackets(String line) {
-	
-		return line.substring(1, line.length()-1);
-	}
-	
-	public String RuleToRegex(Rule rule) {
-		
-		Regex regex = new Regex();
-		
-		for (RuleElement ruleElement : rule.getRuleElements()) {
-			
-			int startTagLength = ruleElement.getStartTag().length();
-			String ruleElementValue = ruleElement.value.replace("&gt;", ">").replace("&lt;", "<");
-			
-			if(ruleElement.getStartTag().substring(1, startTagLength-1).equals("prefix")) {
-				regex.getPrefixes().add(ruleElementValue);
-			}
-			else if(ruleElement.getStartTag().substring(1, startTagLength-1).equals("token")) {
-				regex.setToken(ruleElementValue);
-			}
-			else if(ruleElement.getStartTag().substring(1, startTagLength-1).equals("postfix")) {
-				regex.setPostfix(ruleElementValue);
-			}
-		}
-		
-		return regex.getRegex();
-	}
-	
-	public Rule RegexToRule(String regex) {
-		Rule rule = new Rule();
-			
-		String[] tokens = regex.split(Pattern.quote("(.*?)"));			
-
-		String[] prefixTokens = tokens[0].split(Pattern.quote(".*?"));
-		
-		for(int i=0; i < prefixTokens.length; i++) {
-			if(i == prefixTokens.length-1) {
-				
-//				rules.add("<token>"+replaceBrackets(prefixTokens[i])+"</token>");
-				rule.getRuleElements().add(new RuleElement("token", replaceBrackets(prefixTokens[i])));
-			}
-			else
-			{
-//				rules.add("<prefix>"+prefixTokens[i]+"</prefix>");
-				rule.getRuleElements().add(new RuleElement("prefix", prefixTokens[i]));
-			}
-		}
-		
-//		rules.add("<postfix>"+replaceBrackets(tokens[1])+"</postfix>");
-		rule.getRuleElements().add(new RuleElement("postfix", replaceBrackets(tokens[1])));
-		
-		return rule;
-	}
-	
+	/*
+	 * Function to check if a tag provided by user is listed in the tags we support.
+	 */
 	public String checkTag(String tag) {
 		return tags.stream().filter(x->x.equals(tag)).findFirst().get();
 	}
 	
-	
-	public Rule HtmlToEntitiesInRules(Rule rule) {
-//		ArrayList<String> updatedRules = new ArrayList<>();
-//		Rule updatedRule = new Rule();
-		
-		
+	/*
+	 * Function to perform following conversions:
+	 * 		< to &lt;
+	 *		> to &gt;
+	 */
+	public Rule htmlToEntities(Rule rule) {
 			for (RuleElement ruleElement : rule.getRuleElements()) {
-				String tag = checkTag(ruleElement.getStartTag().substring(1,ruleElement.getStartTag().length()-1));
+				String tag = this.checkTag(ruleElement.getStartTag().substring(1,ruleElement.getStartTag().length()-1));
 				String startTag = "<"+tag+">";
 				String endTag = "</"+tag+">";
 				
 				ruleElement.setValue(ruleElement.getValue().replace(">", "&gt;").replace("<", "&lt;").trim());
 			}
 
-//			return updatedRule;
 			return rule;
 	}
 	
-	
-	public void printRule(Rule rule) {
-		
-		for(RuleElement ruleElement : rule.getRuleElements()) {
-			System.out.println(ruleElement.getRuleElement());
-		}
+	public String htmlToEntities(String str) {
+		return	str.replace(">", "&gt;").replace("<", "&lt;").trim();
 	}
+
+	
+	
+	public String entitiesToHtml(String str) {
+		return	str.replace("&gt;", ">").replace("&lt;", "<").trim();
+	}
+	
+
+	public ArrayList<String> getTags() {
+		return tags;
+	}
+
+
+	public void setTags(ArrayList<String> tags) {
+		this.tags = tags;
+	}
+	
 	
 }

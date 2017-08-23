@@ -6,6 +6,8 @@ public class Regex {
 	String token = "";
 	String postfix = "";
 	
+	ArrayList<String> postfixes = new ArrayList<>();
+	
 	public ArrayList<String> getPrefixes() {
 		return prefixes;
 	}
@@ -42,9 +44,26 @@ public class Regex {
 		
 		regex += "(" + token + ")";
 		regex += "(.*?)";
-		regex += "(" + postfix + ")";
+
+		regex += "(";
+		for (int i=0; i < postfixes.size(); i++) {
+			
+			if(i>0)
+				regex+= "|";
+			
+			regex += postfixes.get(i);
+		}
+		regex += ")";
+		
 		
 		return regex;
+	}
+	
+	public ArrayList<String> getPostfixes() {
+		return postfixes;
+	}
+	public void setPostfixes(ArrayList<String> postfixes) {
+		this.postfixes = postfixes;
 	}
 	
 	

@@ -3,6 +3,7 @@ public class RuleElement {
 	String startTag;
 	String value;
 	String endTag;
+	Integer sequenceNo;
 	
 	public RuleElement(String startTag, String value, String endTag) {
 		super();
@@ -16,6 +17,14 @@ public class RuleElement {
 		this.startTag = "<"+tag+">";
 		this.value = value;
 		this.endTag = "</"+tag+">";
+	}
+	
+	public RuleElement(Integer sequenceNo, String tag, String value) {
+		super();
+		this.startTag = "<"+tag+">";
+		this.value = value;
+		this.endTag = "</"+tag+">";
+		this.sequenceNo = sequenceNo;
 	}
 	
 	public String getStartTag() {
@@ -39,6 +48,14 @@ public class RuleElement {
 	
 	public String getRuleElement() {
 		return startTag+value+endTag;
+	}
+
+	public Integer getSequenceNo() {
+		return sequenceNo;
+	}
+
+	public void setSequenceNo(Integer sequenceNo) {
+		this.sequenceNo = sequenceNo;
 	}
 	
 	

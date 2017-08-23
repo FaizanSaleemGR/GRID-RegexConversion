@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import models.RegexUtils;
 import models.Rule;
+import models.RuleToRegexUtils;
 
 public class RuleToRegex {
 
@@ -17,18 +18,20 @@ public class RuleToRegex {
 		System.err.println("Rule To Regex Converter\n");
 		
 		RegexUtils regexUtils = new RegexUtils();
+		RuleToRegexUtils ruleToRegexUtils = new RuleToRegexUtils();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String line=null;
 		Rule rule = new Rule();
 		
 		try {
-			while((line = br.readLine()).length() > 0 ) {
-				rule.getRuleElements().add(regexUtils.convertStringToRuleElement(line.trim()));
+			while(!(line = br.readLine()).isEmpty()) {
+				rule.getRuleElements().add(ruleToRegexUtils.convertStringToRuleElement(line.trim()));
 			}
 
-			String regexFromRule = regexUtils.RuleToRegex(rule);
-			System.out.println(regexFromRule);
+			String ruleToRegex = ruleToRegexUtils.ruleToRegex(rule);
+
+			System.out.println("\n"+ruleToRegex);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
